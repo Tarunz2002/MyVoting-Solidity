@@ -1,0 +1,33 @@
+pragma solidity ^0.5.6;
+
+contract Voting {
+ mapping (bytes32 => uint8) public votesReceived;
+ bytes32[] public candidateList;
+
+ constructor(bytes32[] memory candidateNames) public {
+   candidateList = candidateNames;
+ }
+
+ function totalVotesFor(bytes32 candidate) public view returns (uint8) {
+   require(validCandidate(candidate), "Invalid candidate");
+   return votesReceived[candidate];
+ }
+
+ function voteForCandidate(bytes32 candidate) public {
+   require(validCandidate(candidate), "Invalid candidate");
+   votesReceived[candidate] += 1;
+ }
+
+ function validCandidate(bytes32 candidate) public view returns (bool) {
+   for(uint i = 0; i < candidateList.length; i++) {
+     if (candidateList[i] == candidate) {
+       return true;
+     }
+   }
+   return false;
+ }
+
+ function getCandidateList() public view returns (bytes32[] memory) {
+   return candidateList;
+ }
+}
